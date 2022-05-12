@@ -1,3 +1,18 @@
+function validation(selection,firstName,LastName,phoneNumber,email,password,confirmPassword){
+    
+          cy.contains(selection).click();
+          cy.get('#FirstName').type(firstName)
+          cy.get('#LastName').type(LastName)
+          cy.get('#Phone').type(phoneNumber)
+          cy.get('#Email').type(email)
+          if(password.length >0){
+            cy.get('#Password').type(password).should('have.value',password)
+          }
+          if(confirmPassword.length >0){
+            cy.get('#Password2').type(confirmPassword).should('have.value',password)
+          }
+          
+}
 describe("Samtrygg Automation", () => {
     beforeEach(() => {
       cy.visit("https://stage02.dev.samtrygg.se/");
@@ -138,12 +153,7 @@ describe("Samtrygg Automation", () => {
   
           // Go to Create account page 
           cy.get("ul.right.headData li a").contains("Create an account").click();
-          cy.contains("Tenant").click();
-          cy.get('#FirstName').type('Saad')
-          cy.get('#LastName').type('Hussain')
-          cy.get('#Phone').type('123456789')
-          cy.get('#Email').type('kingKhan@gmail.com')
-          cy.get('#Password').type("23210811")
+          validation('Tenant','saad','khan','2321081','ksaad7933@gmail.com','2321081','')
           cy.get('[type="submit"]').should("contain", "Create your free account").click()
   
       })
