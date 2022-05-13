@@ -1,161 +1,216 @@
-function validation(selection,firstName,LastName,phoneNumber,email,password,confirmPassword){
-    
-          cy.contains(selection).click();
-          cy.get('#FirstName').type(firstName)
-          cy.get('#LastName').type(LastName)
-          cy.get('#Phone').type(phoneNumber)
-          cy.get('#Email').type(email)
-          if(password.length >0){
-            cy.get('#Password').type(password).should('have.value',password)
-          }
-          if(confirmPassword.length >0){
-            cy.get('#Password2').type(confirmPassword).should('have.value',password)
-          }
-          
+import credentials from '../fixtures/credentials.json'
+
+function formfilling(applicant,firstName,surName,phoneNumber,email,password,confirmPasword){
+  
+  cy.contains(applicant).click();
+  cy.get('#FirstName').type(firstName)
+  cy.get('#LastName').type(surName)
+  cy.get('#Phone').type(phoneNumber)
+  cy.get('#Email').type(email)
+
+  if(password.length >0){
+    cy.get('#Password').type(password).should('have.value',password)
+  }
+  if(confirmPasword.length >0){
+    cy.get('#Password2').type(confirmPasword).should('have.value',confirmPasword)
+  }
+  
+
 }
+
 describe("Samtrygg Automation", () => {
-    beforeEach(() => {
-      cy.visit("https://stage02.dev.samtrygg.se/");
-    });
-  
-    it("verify if all the inputs fields have valid placeholders", () => {
-  
-      //verfiying that the user is on landing page 
-      cy.get("h1.top-section-panel__h1").should("contain","Upptäck ditt nya hem");
-      
-      //Changing the language to english
-      cy.get(".language-a").click();
-      
-      //Verifying all placeholders are on the right place
-      cy.get("ul.right.headData li a").contains("Create an account").click();
-      cy.contains("Tenant").click();
-      cy.get('[for="FirstName"]').should("contain", "First name");
-      cy.get('[for="LastName"]').should("contain", "Surname");
-      cy.get('[for="Email"]').should("contain", "E-mail");
-      cy.get('[for="Password"]').should("contain","Password (at least 8 characters)");
-      cy.get('[for="Password2"]').should("contain", "Confirm new password");
-  
-    });
-  
-    it("Verify if system is giving validtion messages if fields are left empty ", () => {
-  
-      // Chaning the lagauage to English
-      cy.get(".language-a").click();
-  
-      // Go to Create account page 
-      cy.get("ul.right.headData li a").contains("Create an account").click();
-  
-      // Submiting the form without filling the mendatory fields 
-      cy.get('[type="submit"]').should("contain", "Create your free account").click()
-  
-      // Checking validation Messages 
-      cy.get('div.alert-box.info span.data').should('contain','Please fill in all fields correctly')
-      cy.get('div.row.form-group div.radioError.errorMsgDiv').should('contain','Please select Tenant or Landlord to complete the process')
-      cy.get('.errorMsgDiv.required').should('contain',' First name is required')
-      cy.get('#Phone').parents('div').find('.errorMsgDiv.required').should( 'contain','Phone number is required')
-      cy.get('#Email').parents('div').find('.errorMsgDiv.required').should( 'contain',' E-mail is required')
-      cy.get('#Password').parents('div').find('.errorMsgDiv.required').should( 'contain',' Password is required')
-      cy.get('#Password2').parents('div').find('.errorMsgDiv.required').should( 'contain',' Confirm password is required')
-      
-    });
-  
-      it("Verify if the User can Create Account while leaving the First name field empty",() => {
-  
-          // Chaning the lagauage to English
-          cy.get(".language-a").click();
-  
-          // Go to Create account page 
-          cy.get("ul.right.headData li a").contains("Create an account").click();
-          cy.contains("Tenant").click();
-          cy.get('#LastName').type('Hussain')
-          cy.get('#Phone').type('123456789')
-          cy.get('#Email').type('kingKhan@gmail.com')
-          cy.get('#Password').type("23210811")
-          cy.get('#Password2').type("23210811")
-          cy.get('[type="submit"]').should("contain", "Create your free account").click()
-  
-  
-      })
-      it("Verify if the User can Create Account while leaving the Surname field empty",() => {
-  
-          // Chaning the lagauage to English
-          cy.get(".language-a").click();
-  
-          // Go to Create account page 
-          cy.get("ul.right.headData li a").contains("Create an account").click();
-          cy.contains("Tenant").click();
-          cy.get('#FirstName').type('Saad')
-          cy.get('#Phone').type('123456789')
-          cy.get('#Email').type('kingKhan@gmail.com')
-          cy.get('#Password').type("23210811")
-          cy.get('#Password2').type("23210811")
-          cy.get('[type="submit"]').should("contain", "Create your free account").click()
-  
-  
-      })
-  
-      it("Verify if the User can Create Account while leaving the Phone number field empty",() => {
-  
-          // Chaning the lagauage to English
-          cy.get(".language-a").click();
-  
-          // Go to Create account page 
-          cy.get("ul.right.headData li a").contains("Create an account").click();
-          cy.contains("Tenant").click();
-          cy.get('#FirstName').type('Saad')
-          cy.get('#LastName').type('Hussain')
-          cy.get('#Email').type('kingKhan@gmail.com')
-          cy.get('#Password').type("23210811")
-          cy.get('#Password2').type("23210811")
-          cy.get('[type="submit"]').should("contain", "Create your free account").click()
-  
-  
-      })
-      it("Verify if the User can Create Account while leaving the Email field empty",() => {
-  
-          // Chaning the lagauage to English
-          cy.get(".language-a").click();
-  
-          // Go to Create account page 
-          cy.get("ul.right.headData li a").contains("Create an account").click();
-          cy.contains("Tenant").click();
-          cy.get('#FirstName').type('Saad')
-          cy.get('#LastName').type('Hussain')
-          cy.get('#Phone').type('123456789')
-          cy.get('#Password').type("23210811")
-          cy.get('#Password2').type("23210811")
-          cy.get('[type="submit"]').should("contain", "Create your free account").click()
-  
-  
-      })
-      
-      it("Verify if the User can Create Account while leaving the Password field empty",() => {
-  
-          // Chaning the lagauage to English
-          cy.get(".language-a").click();
-  
-          // Go to Create account page 
-          cy.get("ul.right.headData li a").contains("Create an account").click();
-          cy.contains("Tenant").click();
-          cy.get('#FirstName').type('Saad')
-          cy.get('#LastName').type('Hussain')
-          cy.get('#Phone').type('123456789')
-          cy.get('#Email').type('kingKhan@gmail.com')
-          cy.get('#Password2').type("23210811")
-          cy.get('[type="submit"]').should("contain", "Create your free account").click()
-  
-  
-      })
-      it.only("Verify if the User can Create Account while leaving the Confirm Passowrd field empty",() => {
-  
-          // Chaning the lagauage to English
-          cy.get(".language-a").click();
-  
-          // Go to Create account page 
-          cy.get("ul.right.headData li a").contains("Create an account").click();
-          validation('Tenant','saad','khan','2321081','ksaad7933@gmail.com','2321081','')
-          cy.get('[type="submit"]').should("contain", "Create your free account").click()
-  
-      })
-      
+  Cypress.on('uncaught:exception' ,(err, runnable) => {
+    return false
+  }) 
+  beforeEach(() => {
+    cy.visit("https://stage02.dev.samtrygg.se/");
   });
+
+  it("verify if all the inputs fields have valid placeholders", () => {
+
+    //verfiying that the user is on landing page 
+    cy.get("h1.top-section-panel__h1").should("contain","Upptäck ditt nya hem");
+    
+    //Changing the language to english
+    cy.get(".language-a").click();
+    
+    //Verifying all placeholders are on the right place
+    cy.get("ul.right.headData li a").contains("Create an account").click();
+    cy.contains("Tenant").click();
+    cy.get('[for="FirstName"]').should("contain", "First name");
+    cy.get('[for="LastName"]').should("contain", "Surname");
+    cy.get('[for="Email"]').should("contain", "E-mail");
+    cy.get('[for="Password"]').should("contain","Password (at least 8 characters)");
+    cy.get('[for="Password2"]').should("contain", "Confirm new password");
+
+  });
+
+  it("Verify if system is giving validtion messages if fields are left empty ", () => {
+
+    // Chaning the lagauage to English
+    cy.get(".language-a").click();
+
+    // Go to Create account page 
+    cy.get("ul.right.headData li a").contains("Create an account").click();
+
+    // Submiting the form without filling the mendatory fields 
+    cy.get('[type="submit"]').should("contain", "Create your free account").click()
+
+    // Checking validation Messages 
+    cy.get('div.alert-box.info span.data').should('contain','Please fill in all fields correctly')
+    cy.get('div.row.form-group div.radioError.errorMsgDiv').should('contain','Please select Tenant or Landlord to complete the process')
+    cy.get('.errorMsgDiv.required').should('contain',' First name is required')
+    cy.get('#Phone').parents('div').find('.errorMsgDiv.required').should( 'contain','Phone number is required')
+    cy.get('#Email').parents('div').find('.errorMsgDiv.required').should( 'contain',' E-mail is required')
+    cy.get('#Password').parents('div').find('.errorMsgDiv.required').should( 'contain',' Password is required')
+    cy.get('#Password2').parents('div').find('.errorMsgDiv.required').should( 'contain',' Confirm password is required')
+    
+  });
+
+    it("Verify if the User can Create Account while leaving the First name field empty",() => {
+
+        // Chaning the lagauage to English
+        cy.get(".language-a").click();
+
+        // Go to Create account page 
+        cy.get("ul.right.headData li a").contains("Create an account").click();
+
+        // Filling signup form
+        formfilling('Tenant',' ','Ihsan','23210811','mohsin+9898989@samtrygg.se','23210811','23210811')
+
+        // Submiting the form 
+        cy.get('[type="submit"]').should("contain", "Create your free account").click()
+
+
+    })
+    
+    it("Verify if the User can Create Account while leaving the Surname field empty",() => {
+
+        
+        // Chaning the lagauage to English
+        cy.get(".language-a").click();
+
+        // Go to Create account page 
+        cy.get("ul.right.headData li a").contains("Create an account").click();
+
+        // Filling signup form
+        formfilling('Landlord','Mohsin',' ','23210811','mohsin+9898989@samtrygg.se0811')
+
+        // Submiting the form 
+        cy.get('[type="submit"]').should("contain", "Create your free account").click()
+
+    })
+
+    it("Verify if the User can Create Account while leaving the Phone number field empty",() => {
+
+        // Chaning the lagauage to English
+        cy.get(".language-a").click();
+
+        // Go to Create account page 
+        cy.get("ul.right.headData li a").contains("Create an account").click();
+
+        // Filling signup form
+        formfilling('Landlord','Mohsin','Ihsan ',' ','mohsin+9898989@samtrygg.se0811')
+
+        // Submiting the form 
+        cy.get('[type="submit"]').should("contain", "Create your free account").click()
+
+    })
+    it("Verify if the User can Create Account while leaving the Email field empty",() => {
+
+          // Chaning the lagauage to English
+          cy.get(".language-a").click();
+
+          // Go to Create account page 
+          cy.get("ul.right.headData li a").contains("Create an account").click();
+  
+          // Filling signup form
+          formfilling('Landlord','Mohsin','Ihsan ','2321081','','23210811','23210811')
+  
+          // Submiting the form 
+          cy.get('[type="submit"]').should("contain", "Create your free account").click()
+
+    })
+    
+    it("Verify if the User can Create Account while leaving the Password field empty",() => {
+
+       // Chaning the lagauage to English
+       cy.get(".language-a").click()
+      
+        // Go to Create account page 
+        cy.get("ul.right.headData li a").contains("Create an account").click();
+
+        // Filling signup form
+        formfilling('Landlord','Mohsin','Ihsan','23210811','mohsin+9898989@samtrygg.se')
+        // Submiting the form 
+        cy.get('[type="submit"]').should("contain", "Create your free account").click()
+
+
+    })
+    it("Verify if the User can Create Account while leaving the Confirm Passowrd field empty",() => {
+
+        // Chaning the lagauage to English
+        cy.get(".language-a").click();
+
+        // Go to Create account page 
+        cy.get("ul.right.headData li a").contains("Create an account").click();
+        formfilling('Landlord','Mohsin','Ihsan','23210811',' mohsin+9898989@samtrygg.se')       
+        cy.get('[type="submit"]').should("contain", "Create your free account").click()
+
+    })
+
+      it("Verify that email filed should only accept valid email",()=>{
+         // Chaning the lagauage to English
+        cy.get(".language-a").click();
+
+         // Go to Create account page 
+        cy.get("ul.right.headData li a").contains("Create an account").click();
+        formfilling('Landlord','Mohsin','Ihsan','23210811',' kingkhan@gmail.','23210811','23210811')
+
+        cy.get('#Email').parents('div').find('.errorMsgDiv.minlength').should( 'contain','Enter a valid E-mail address')
+        cy.get('#Phone').parents('div').find('.errorMsgDiv.required').should( 'contain','Phone number is required')
+        cy.get('div.alert-box.info span.data').should('contain','Please fill in all fields correctly')
+      })
+      it("Verify password match ",()=>{
+        // Chaning the lagauage to English
+        cy.get(".language-a").click();
+
+        // Go to Create account page 
+        cy.get("ul.right.headData li a").contains("Create an account").click();
+        formfilling('Landlord','Mohsin','Ihsan','12345678','mohsin+9898989@samtrygg.se08112')
+        cy.get('[type="submit"]').should("contain", "Create your free account").click()
+        cy.get('div.alert-box.info span.data').should('contain','Please fill in all fields correctly')
+        cy.get('#Password').parents('div').find('.errorMsgDiv.donotMatch').should('contain','Passwords do not match')
+        cy.get('#Password2').parents('div').find('.errorMsgDiv.donotMatch').should('contain','Passwords do not match')
+
+
+      })
+      it('Verify that phone number field only accept numeric values',()=>{
+        // Chaning the lagauage to English
+        cy.get(".language-a").click();
+
+        // Go to Create account page 
+        cy.get("ul.right.headData li a").contains("Create an account").click();
+        formfilling('Landlord','Mohsin','Ihsan','abcd','mohsin+9898989@samtrygg.se108112')
+        cy.get('[type="submit"]').should("contain", "Create your free account").click()
+        cy.get('div.alert-box.info span.data').should('contain','Please fill in all fields correctly')
+        cy.get('#Phone').parents('div').find('.errorMsgDiv.required').should( 'contain','Phone number is required')
+      })
+      it.only('Verify if the user can Create acc with valid credentials',()=>{
+        cy.fixture('credentials.json').then((user)=>{
+          
+        })
+        // Chaning the lagauage to English
+        cy.get(".language-a").click();
+
+        // Go to Create account page 
+        cy.get("ul.right.headData li a").contains("Create an account").click();
+        
+        formfilling(credentials.applicant,'Mohsin','Ihsan','2321081','kingkhan1@gmail.com','232108112','232108112')
+        cy.get('[type="submit"]').should("contain", "Create your free account").click()
+        cy.get('h2').should('contain','Verify your e-mail')
+
+      })
+
+    
+});
