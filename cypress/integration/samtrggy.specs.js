@@ -1,4 +1,9 @@
 import credentials from '../fixtures/credentials.json'
+function loginform(){
+  cy.get('.is-desktop-menu-stuff ul li').contains('Sign in').click()
+  cy.get()
+}
+  
 
 function formfilling(applicant,firstName,surName,phoneNumber,email,password,confirmPasword){
   
@@ -76,7 +81,7 @@ describe("Samtrygg Automation", () => {
         cy.get("ul.right.headData li a").contains("Create an account").click();
 
         // Filling signup form
-        formfilling('Tenant',' ','Ihsan','23210811','mohsin+9898989@samtrygg.se','23210811','23210811')
+        formfilling(credentials.applicant,' ',credentials.surName,credentials.phone,credentials.email,credentials.password,credentials.confirmPassword)
 
         // Submiting the form 
         cy.get('[type="submit"]').should("contain", "Create your free account").click()
@@ -94,7 +99,7 @@ describe("Samtrygg Automation", () => {
         cy.get("ul.right.headData li a").contains("Create an account").click();
 
         // Filling signup form
-        formfilling('Landlord','Mohsin',' ','23210811','mohsin+9898989@samtrygg.se0811')
+        formfilling(credentials.applicant,credentials.firstName,' ',credentials.phone,credentials.email,credentials.password,credentials.confirmPassword)
 
         // Submiting the form 
         cy.get('[type="submit"]').should("contain", "Create your free account").click()
@@ -110,7 +115,7 @@ describe("Samtrygg Automation", () => {
         cy.get("ul.right.headData li a").contains("Create an account").click();
 
         // Filling signup form
-        formfilling('Landlord','Mohsin','Ihsan ',' ','mohsin+9898989@samtrygg.se0811')
+        formfilling(credentials.applicant,credentials.firstName,credentials.surName,' ',credentials.email,credentials.password,credentials.confirmPassword)
 
         // Submiting the form 
         cy.get('[type="submit"]').should("contain", "Create your free account").click()
@@ -125,7 +130,7 @@ describe("Samtrygg Automation", () => {
           cy.get("ul.right.headData li a").contains("Create an account").click();
   
           // Filling signup form
-          formfilling('Landlord','Mohsin','Ihsan ','2321081','','23210811','23210811')
+          formfilling(credentials.applicant,credentials.firstName,credentials.surName,credentials.phone,' ',credentials.password,credentials.confirmPassword)
   
           // Submiting the form 
           cy.get('[type="submit"]').should("contain", "Create your free account").click()
@@ -141,7 +146,7 @@ describe("Samtrygg Automation", () => {
         cy.get("ul.right.headData li a").contains("Create an account").click();
 
         // Filling signup form
-        formfilling('Landlord','Mohsin','Ihsan','23210811','mohsin+9898989@samtrygg.se')
+        formfilling(credentials.applicant,credentials.firstName,credentials.surName,credentials.phone,credentials.email,' ',credentials.confirmPassword)
         // Submiting the form 
         cy.get('[type="submit"]').should("contain", "Create your free account").click()
 
@@ -154,7 +159,7 @@ describe("Samtrygg Automation", () => {
 
         // Go to Create account page 
         cy.get("ul.right.headData li a").contains("Create an account").click();
-        formfilling('Landlord','Mohsin','Ihsan','23210811',' mohsin+9898989@samtrygg.se')       
+        formfilling(credentials.applicant,credentials.firstName,credentials.surName,credentials.phone,credentials.email,credentials.password)       
         cy.get('[type="submit"]').should("contain", "Create your free account").click()
 
     })
@@ -165,7 +170,7 @@ describe("Samtrygg Automation", () => {
 
          // Go to Create account page 
         cy.get("ul.right.headData li a").contains("Create an account").click();
-        formfilling('Landlord','Mohsin','Ihsan','23210811',' kingkhan@gmail.','23210811','23210811')
+        formfilling(credentials.applicant,credentials.firstName,credentials.surName,credentials.phone,credentials.invalidEmail,credentials.password,credentials.confirmPassword)
 
         cy.get('#Email').parents('div').find('.errorMsgDiv.minlength').should( 'contain','Enter a valid E-mail address')
         cy.get('#Phone').parents('div').find('.errorMsgDiv.required').should( 'contain','Phone number is required')
@@ -177,7 +182,7 @@ describe("Samtrygg Automation", () => {
 
         // Go to Create account page 
         cy.get("ul.right.headData li a").contains("Create an account").click();
-        formfilling('Landlord','Mohsin','Ihsan','12345678','mohsin+9898989@samtrygg.se08112')
+        formfilling(credentials.applicant,credentials.firstName,credentials.surName,credentials.phone,credentials.email,credentials.password,credentials.worngPassword)
         cy.get('[type="submit"]').should("contain", "Create your free account").click()
         cy.get('div.alert-box.info span.data').should('contain','Please fill in all fields correctly')
         cy.get('#Password').parents('div').find('.errorMsgDiv.donotMatch').should('contain','Passwords do not match')
@@ -185,30 +190,36 @@ describe("Samtrygg Automation", () => {
 
 
       })
-      it('Verify that phone number field only accept numeric values',()=>{
+      it.only('Verify that phone number field only accept numeric values',()=>{
         // Chaning the lagauage to English
         cy.get(".language-a").click();
 
         // Go to Create account page 
         cy.get("ul.right.headData li a").contains("Create an account").click();
-        formfilling('Landlord','Mohsin','Ihsan','abcd','mohsin+9898989@samtrygg.se108112')
+        formfilling(credentials.applicant,credentials.firstName,credentials.surName,' ',credentials.email,credentials.password,credentials.confirmPassword)
         cy.get('[type="submit"]').should("contain", "Create your free account").click()
         cy.get('div.alert-box.info span.data').should('contain','Please fill in all fields correctly')
         cy.get('#Phone').parents('div').find('.errorMsgDiv.required').should( 'contain','Phone number is required')
       })
-      it.only('Verify if the user can Create acc with valid credentials',()=>{
-        cy.fixture('credentials.json').then((user)=>{
-          
-        })
+      it('Verify if the user can Create acc with valid credentials',()=>{
+      
+
         // Chaning the lagauage to English
         cy.get(".language-a").click();
 
         // Go to Create account page 
         cy.get("ul.right.headData li a").contains("Create an account").click();
         
-        formfilling(credentials.applicant,'Mohsin','Ihsan','2321081','kingkhan1@gmail.com','232108112','232108112')
+        formfilling(credentials.applicant,credentials.firstName,credentials.surName,credentials.phone,credentials.email,credentials.password,credentials.confirmPassword)
         cy.get('[type="submit"]').should("contain", "Create your free account").click()
         cy.get('h2').should('contain','Verify your e-mail')
+
+      })
+      it('Login with correct credentials',(){
+        // Chaning the lagauage to English
+        cy.get(".language-a").click();
+
+
 
       })
 
